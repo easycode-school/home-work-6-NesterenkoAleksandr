@@ -1,0 +1,19 @@
+<form (ngSubmit)='onSubmit()' #form='ngForm'  novalidate class="m-3">
+  <fieldset>
+    <legend class="h3 text-center">POST</legend>
+    <div class="form-group">
+      <label for="userId">User:</label>
+      <input [(ngModel)]='post.userId' #userId name='userId' type="number" class="form-control" id="exampleInputPassword1" placeholder="Id Users" required>
+    </div>
+    <div class="form-group">
+      <label for="title">Title:</label>
+      <input name='title' type="text" class="form-control" id="title" [(ngModel)]='post.title' placeholder="Enter post title" required>
+    </div>
+    <div class="form-group">
+      <label for="text">Text:</label>
+      <input  name='text' type="text" class="form-control" id="text" placeholder="Enter post text" [(ngModel)]='post.body' required>
+    </div>
+    <button type="submit" class="btn btn-primary mr-2" (click)="onSubmit()" [disabled]='form.invalid'>Submit</button>
+    <button type="submit" class="btn btn-secondary" (click)="onCancel()" [disabled]='!post.userId && !post.title && !post.body'>Cancel</button>
+  </fieldset>    
+</form>
