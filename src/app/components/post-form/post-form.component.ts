@@ -1,10 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IPost } from './../../interfaces/ipost';
 import { NgForm } from '@angular/forms';
-import { PostsService } from './../../services/posts.service';
-import { IUser } from './../../interfaces/iuser';
-import { UsersService } from './../../services/users.service';
-import { PostFormService } from './../../services/post-form.service';
+import { ComponentsControllerService } from './../../services/components-controller.service';
 
 @Component({
   selector: 'app-post-form',
@@ -13,22 +10,15 @@ import { PostFormService } from './../../services/post-form.service';
 })
 export class PostFormComponent implements OnInit {
   @ViewChild('form') form: NgForm;
-  /**
-   * Текущий пост
-   */
-  public post: IPost;
 
-  /**
-   * Список пользователей
-   */
-  private users: IUser[];
+  /** Текущий пост */
+  private _post: IPost;
 
-  constructor(private usersService: UsersService, private postFormService: PostFormService
-  ) { }
+  constructor(private componentsController: ComponentsControllerService) { }
 
   ngOnInit() {
-    this.postFormService.postObservableSubject.subscribe((currentPost: IPost) => {
-      this.post = currentPost;
+    this.componentsController.currentPostObservableSubject.subscribe((currentPost: IPost) => {
+      this._post = currentPost;
     });
   }
 
@@ -40,7 +30,13 @@ export class PostFormComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    this.postFormService.onSubmit(this.post);
+    if (this.componentsController.IsEdit) {
+      this.componentsController.updatePost(Object.assign({}, this._post));
+    } else {
+      this.componentsController.addPost(Object.assign({}, this._post));
+    }
+
+    this.componentsController.cancel();
     this.form.resetForm();
   }
 
@@ -48,7 +44,7 @@ export class PostFormComponent implements OnInit {
    * Обработчик нажатия на кнопку "Cancel"
    */
   public onCancel() {
-    this.postFormService.onCancel();
+    this.componentsController.cancel();
     this.form.resetForm();
   }
 

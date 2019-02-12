@@ -1,10 +1,8 @@
-import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
-import { UsersService } from './../../services/users.service';
+import { Component, OnInit, Input } from '@angular/core';
 import { IPost } from './../../interfaces/IPost';
-import { CommentsService } from './../../services/comments.service';
 import { IComment } from './../../interfaces/icomment';
-import { PostFormService } from './../../services/post-form.service';
-import { PostsService } from './../../services/posts.service';
+import { ComponentsControllerService } from './../../services/components-controller.service';
+import { IUser } from './../../interfaces/IUser';
 
 @Component({
   selector: 'app-post',
@@ -12,24 +10,27 @@ import { PostsService } from './../../services/posts.service';
   styleUrls: ['./post.component.css']
 })
 export class PostComponent implements OnInit {
-  @Output() postDeleted = new EventEmitter();
+  /** Текущий пост */
   @Input() public post: IPost;
 
-  private comments: IComment[];
+  /** Список комментариев поста */
+  private _comments: IComment[];
 
-  /**
-   * Имя автора поста
-   */
-  private userName: string;
+  /** Автор поста */
+  private _user: IUser;
 
-  constructor(private userService: UsersService
-              , private commentsService: CommentsService
-              , private postFormService: PostFormService
-    ) { }
+  constructor(private componentsController: ComponentsControllerService) { }
 
   ngOnInit() {
-    // Определение имени автора поста по его идентификатору
-    this.userName = this.userService.getUserNameById(this.post.userId);
+    // Определение автора поста по его идентификатору
+    this.componentsController.getUser(this.post.userId).subscribe(
+      (user: IUser) => {
+        this._user = user;
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
   }
 
   /**
@@ -37,7 +38,7 @@ export class PostComponent implements OnInit {
    */
   public onDelete(): void {
     if (confirm('Are you sure, you want to delete this post?')) {
-      this.postDeleted.emit();
+      this.componentsController.deletePost(this.post.id);
     }
   }
 
@@ -46,9 +47,13 @@ export class PostComponent implements OnInit {
    * @param postId идентификатор поста
    */
   public onShowComments(postId: number): void {
-    this.commentsService.getPostComments(this.post.id).subscribe(
+    if (this._comments) {
+      return this._comments = null;
+    }
+
+    this.componentsController.getPostComments(this.post.id).subscribe(
       (comments: IComment[]) => {
-        this.comments = comments;
+        this._comments = comments;
       }
     );
   }
@@ -58,7 +63,6 @@ export class PostComponent implements OnInit {
    * @param post пост, для редактирования
    */
   public onEdit(post: IPost): void {
-    this.postFormService.onEditPost(this.post);
+    this.componentsController.editPost(post);
   }
-
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { IPost } from './../../interfaces/ipost';
-import { PostsService } from './../../services/posts.service';
+import { ComponentsControllerService } from './../../services/components-controller.service';
 
 @Component({
   selector: 'app-posts',
@@ -11,30 +11,14 @@ export class PostsComponent implements OnInit {
   /**
    * Список постов
    */
-  public posts: IPost[];
+  private _posts: IPost[];
 
-  constructor(private postsService: PostsService) { }
+  constructor(private componentsController: ComponentsControllerService) { }
 
   ngOnInit() {
-    this.postsService.getPosts().subscribe(
-      (posts: IPost[]) => {
-        this.posts = posts;
-      }
-    );
-
-    this.postsService.postObservableSubject.subscribe((posts: IPost[]) => {
-      this.posts = posts;
-    });
-  }
-
-  /**
-   * Удаление поста
-   * @param id идентификатор поста
-   */
-  public onDeletePost(id: number) {
-    this.postsService.deletePost(id).subscribe(() => {
-      // Удаление поста изи разметки
-      this.posts = this.posts.filter((post: IPost) =>  post.id !== id);
+    this.componentsController.getPosts();
+    this.componentsController.postsObservableSubject.subscribe((posts: IPost[]) => {
+      this._posts = posts;
     });
   }
 }

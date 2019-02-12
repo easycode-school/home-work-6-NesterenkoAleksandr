@@ -1,15 +1,16 @@
 <div class = "border-bottom mb-3 pb-2 h5">
-  <span class="font-weight-bold">{{ userName }}:</span>&nbsp; {{ post.title }}
+  <span class="font-weight-bold">{{ _user?.name }}:</span>&nbsp;
+   {{ post.title }}
 </div>
 <div class = "mb-3">
   {{ post.body }}
 </div>
 <div class="p-2">
-    <button class = "btn btn-success mr-3" (click) = "onEdit(post)">Edit</button>
+    <button class = "btn btn-success mr-3" (click) = "onEdit(post)" [disabled]="post.id>100">Edit</button>
     <button class = "btn btn-danger mr-3" (click) = "onDelete()">Delete</button>
     <button class = "btn btn-primary" (click) = "onShowComments(post.id)" [disabled]="comments">Show comments</button>
 </div>
-<div *ngFor="let comment of comments" class="m-3  pl-3 py-2">
+<div *ngFor="let comment of _comments" class="m-3  pl-3 py-2">
    <h6 >{{ comment.name }}</h6> 
    <div>Body:&nbsp;{{ comment.body }}</div> 
 </div>
