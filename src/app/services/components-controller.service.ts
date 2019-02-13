@@ -18,7 +18,6 @@ export class ComponentsControllerService {
   };
 
   /** Признак того, что выполняется редактирование поста */
-  public IsEdit = false;
 
   private _currentPostSource = new BehaviorSubject(this._currentPost);
   public currentPostObservableSubject = this._currentPostSource.asObservable();
@@ -36,7 +35,6 @@ export class ComponentsControllerService {
    * @param post пост для редактирования
    */
   public editPost(post: IPost) {
-    this.IsEdit = true;
     this._currentPost = Object.assign({}, post);
     this._currentPostSource.next(this._currentPost);
   }
@@ -45,7 +43,7 @@ export class ComponentsControllerService {
    * Отменить редактирование
    */
   public cancel() {
-    this.IsEdit = false;
+    // this.IsEdit = false;
     this._currentPost = {
       userId: null,
       id: null,
@@ -91,12 +89,10 @@ export class ComponentsControllerService {
    * @param post экземпляр поста
    */
   public addPost(post: IPost) {
-    let length = this._posts.length;
-
     this.server.addPost(post).subscribe(
       (newPost: IPost) => {
         // Идентификатор нового поста
-        newPost.id = ++length;
+        newPost.id = Math.floor(Math.random() * (1000 - 101) ) + 101;
         this._posts.unshift(Object.assign({}, newPost));
         this._postsSource.next(this._posts);
       },

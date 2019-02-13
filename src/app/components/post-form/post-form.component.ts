@@ -14,10 +14,15 @@ export class PostFormComponent implements OnInit {
   /** Текущий пост */
   private _post: IPost;
 
+  /** Режим формы (true - редактирование; false - добавление) */
+  private _isEdit = false;
+
   constructor(private componentsController: ComponentsControllerService) { }
 
   ngOnInit() {
     this.componentsController.currentPostObservableSubject.subscribe((currentPost: IPost) => {
+      // Если нет id поста, тогда происходит добавление поста, в противном случае - изменение
+      this._isEdit = !!currentPost.id;
       this._post = currentPost;
     });
   }
@@ -30,7 +35,7 @@ export class PostFormComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    if (this.componentsController.IsEdit) {
+    if (this._isEdit) {
       this.componentsController.updatePost(Object.assign({}, this._post));
     } else {
       this.componentsController.addPost(Object.assign({}, this._post));

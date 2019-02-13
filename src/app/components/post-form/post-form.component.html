@@ -3,7 +3,7 @@
     <legend class="h3 text-center">POST</legend>
     <div class="form-group">
       <label for="userId">User:</label>
-      <input [(ngModel)]='_post.userId' #userId="ngModel" name='userId' type="number" class="form-control" 
+      <input [(ngModel)]='_post.userId' #userId="ngModel" name='userId' type="number" class="form-control" [disabled]="_isEdit" 
       id="exampleInputPassword1" placeholder="Id Users" required min="1" max="10"  pattern="([1-9]|10)">
       <div class="text-danger" [hidden]="userId.valid">UserID must be greater than 0 and less than or equal to 10</div>
     </div>
