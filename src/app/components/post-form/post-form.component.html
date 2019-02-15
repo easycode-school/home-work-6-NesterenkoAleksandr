@@ -5,17 +5,17 @@
       <label for="userId">User:</label>
       <input [(ngModel)]='_post.userId' #userId="ngModel" name='userId' type="number" class="form-control" [disabled]="_isEdit" 
       id="exampleInputPassword1" placeholder="Id Users" required min="1" max="10"  pattern="([1-9]|10)">
-      <div class="text-danger" [hidden]="userId.valid">UserID must be greater than 0 and less than or equal to 10</div>
+      <div class="text-danger" [hidden]="userId.valid || userId.pristine">UserID must be greater than 0 and less than or equal to 10</div>
     </div>
     <div class="form-group">
       <label for="title">Title:</label>
       <input name='title' type="text" class="form-control" id="title" #postTitle="ngModel" [(ngModel)]='_post.title' placeholder="Enter post title" required>
-      <div class="text-danger" [hidden]="postTitle.valid">Title required</div>
+      <div class="text-danger" [hidden]="postTitle.valid || postTitle.pristine">Title required</div>
     </div>
     <div class="form-group">
       <label for="text">Text:</label>
       <input  name='text' type="text" class="form-control" id="text" #postBody="ngModel" placeholder="Enter post text" [(ngModel)]='_post.body' required>
-      <div class="text-danger" [hidden]="postBody.valid">Body text required</div>
+      <div class="text-danger" [hidden]="postBody.valid || postBody.pristine">Body text required</div>
     </div>
     <button type="submit" class="btn btn-primary mr-2" (click)="onSubmit()" [disabled]='form.invalid'>Submit</button>
     <button type="submit" class="btn btn-secondary" (click)="onCancel()" [disabled]='!_post.userId && !_post.title && !_post.body'>Cancel</button>

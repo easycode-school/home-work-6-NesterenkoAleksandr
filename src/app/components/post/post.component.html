@@ -6,9 +6,9 @@
   {{ post.body }}
 </div>
 <div class="p-2">
-    <button class = "btn btn-success mr-3" (click) = "onEdit(post)" [disabled]="post.id>100">Edit</button>
-    <button class = "btn btn-danger mr-3" (click) = "onDelete()">Delete</button>
-    <button class = "btn btn-primary" (click) = "onShowComments(post.id)" [disabled]="comments || post.id>100">Show comments</button>
+    <button class = "btn btn-success mr-3 my-1" (click) = "onEdit(post)" [disabled]="post.id>100">Edit</button>
+    <button class = "btn btn-danger mr-3 my-1" (click) = "onDelete()">Delete</button>
+    <button class = "btn btn-primary my-1" (click) = "onShowComments(post.id)" [disabled]="comments || post.id>100">Show comments</button>
 </div>
 <div *ngFor="let comment of _comments" class="m-3  pl-3 py-2">
    <h6 >{{ comment.name }}</h6> 

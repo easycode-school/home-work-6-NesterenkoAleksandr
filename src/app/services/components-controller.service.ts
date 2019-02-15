@@ -43,7 +43,6 @@ export class ComponentsControllerService {
    * Отменить редактирование
    */
   public cancel() {
-    // this.IsEdit = false;
     this._currentPost = {
       userId: null,
       id: null,
@@ -91,8 +90,8 @@ export class ComponentsControllerService {
   public addPost(post: IPost) {
     this.server.addPost(post).subscribe(
       (newPost: IPost) => {
-        // Идентификатор нового поста
-        newPost.id = Math.floor(Math.random() * (1000 - 101) ) + 101;
+        // Идентификатор нового поста (вместо 101)
+        newPost.id = Math.floor(Math.random() * 899 ) + 101;
         this._posts.unshift(Object.assign({}, newPost));
         this._postsSource.next(this._posts);
       },
